@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
-    // Mostrar vista previa del archivo
+    // Actualizar la función handleFileSelect
     function handleFileSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -107,31 +107,88 @@ document.addEventListener('DOMContentLoaded', function() {
             filePreview.classList.add('active');
             clearError(fileInput);
 
-            // Mostrar vista previa
+            // Eliminar vista previa anterior
+            const existingPreview = filePreview.querySelector('.preview-content');
+            if (existingPreview) {
+                existingPreview.remove();
+            }
+
+            // Crear nuevo contenedor de vista previa
+            const previewContent = document.createElement('div');
+            previewContent.classList.add('preview-content');
+
             if (file.type.startsWith('image/')) {
+                // Vista previa para imágenes
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const previewImage = document.createElement('img');
-                    previewImage.src = e.target.result;
-                    previewImage.classList.add('file-preview-image');
-                    const previewContainer = document.querySelector('.file-preview');
-                    const existingPreview = previewContainer.querySelector('.file-preview-image');
-                    if (existingPreview) {
-                        existingPreview.remove();
-                    }
-                    previewContainer.insertBefore(previewImage, previewContainer.firstChild);
+                    const previewContainer = document.createElement('div');
+                    previewContainer.classList.add('preview-container');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('file-preview-image');
+                    
+                    const expandButton = document.createElement('button');
+                    expandButton.type = 'button';
+                    expandButton.classList.add('btn-expand');
+                    expandButton.innerHTML = '<i class="fas fa-expand-alt"></i>';
+                    expandButton.onclick = () => {
+                        const modal = document.createElement('div');
+                        modal.classList.add('preview-modal');
+                        modal.innerHTML = `
+                            <div class="preview-modal-content">
+                                <img src="${e.target.result}" alt="Vista previa">
+                                <button class="btn-close"><i class="fas fa-times"></i></button>
+                            </div>
+                        `;
+                        document.body.appendChild(modal);
+                        
+                        modal.querySelector('.btn-close').onclick = () => modal.remove();
+                        modal.onclick = (e) => {
+                            if (e.target === modal) modal.remove();
+                        };
+                    };
+
+                    previewContainer.appendChild(img);
+                    previewContainer.appendChild(expandButton);
+                    previewContent.appendChild(previewContainer);
+                    filePreview.insertBefore(previewContent, filePreview.firstChild);
                 };
                 reader.readAsDataURL(file);
             } else if (file.type === 'application/pdf') {
-                const previewContainer = document.querySelector('.file-preview');
-                const existingPreview = previewContainer.querySelector('.file-preview-image, .pdf-preview');
-                if (existingPreview) {
-                    existingPreview.remove();
-                }
+                // Vista previa para PDFs
+                const pdfContainer = document.createElement('div');
+                pdfContainer.classList.add('pdf-preview-container');
+                
                 const pdfIcon = document.createElement('div');
                 pdfIcon.classList.add('pdf-preview');
                 pdfIcon.innerHTML = '<i class="fas fa-file-pdf"></i>';
-                previewContainer.insertBefore(pdfIcon, previewContainer.firstChild);
+                
+                const pdfInfo = document.createElement('div');
+                pdfInfo.classList.add('pdf-info');
+                pdfInfo.innerHTML = `
+                    <p class="pdf-name">${file.name}</p>
+                    <p class="pdf-size">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                `;
+
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.classList.add('pdf-buttons');
+
+                const viewButton = document.createElement('button');
+                viewButton.type = 'button';
+                viewButton.classList.add('btn-view-pdf');
+                viewButton.innerHTML = '<i class="fas fa-eye"></i> Ver PDF';
+                viewButton.onclick = () => {
+                    const pdfUrl = URL.createObjectURL(file);
+                    window.open(pdfUrl, '_blank');
+                };
+
+                buttonsContainer.appendChild(viewButton);
+                pdfContainer.appendChild(pdfIcon);
+                pdfContainer.appendChild(pdfInfo);
+                pdfContainer.appendChild(buttonsContainer);
+                previewContent.appendChild(pdfContainer);
+                filePreview.insertBefore(previewContent, filePreview.firstChild);
             }
         } else {
             event.target.value = '';

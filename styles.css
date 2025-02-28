@@ -387,14 +387,71 @@ input[type="file"] {
     cursor: pointer;
 }
 
+/* Actualizar los estilos de previsualización de archivos */
 .file-preview {
     display: none;
     padding: 1rem;
     background-color: #f8f9fa;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-top: 1rem;
     align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
+}
+
+.file-preview.active {
+    display: flex;
+}
+
+.preview-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.file-preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 4px;
+    object-fit: contain;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-preview-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pdf-preview {
+    font-size: 3rem;
+    color: var(--primary-red);
+    display: flex;
+    align-items: center;
+}
+
+.btn-view-pdf {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-view-pdf:hover {
+    background-color: var(--secondary-blue);
+    transform: translateY(-2px);
+}
+
+.selected-file-name {
+    color: var(--primary-blue);
+    font-weight: 500;
+    word-break: break-all;
 }
 
 .file-preview.active {
@@ -543,6 +600,29 @@ input[type="file"] {
     .areas-container {
         grid-template-columns: 1fr;
     }
+
+    .file-preview {
+        flex-direction: column;
+    }
+
+    .preview-content {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .file-preview-image {
+        max-width: 100%;
+    }
+
+    .pdf-preview-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-view-pdf {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 600px) {
@@ -633,4 +713,141 @@ input[type="file"] {
 select:disabled {
     background-color: #e9ecef;
     cursor: not-allowed;
+}
+
+/* Estilos para la vista previa de archivos */
+.preview-container {
+    position: relative;
+    display: inline-block;
+}
+
+.file-preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.btn-expand {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-expand:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.preview-modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.preview-modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.preview-modal .btn-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Estilos para la vista previa de PDF */
+.pdf-preview-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.pdf-preview {
+    font-size: 2.5rem;
+    color: var(--primary-red);
+}
+
+.pdf-info {
+    flex-grow: 1;
+}
+
+.pdf-name {
+    font-weight: 500;
+    color: var(--primary-blue);
+    margin-bottom: 0.25rem;
+}
+
+.pdf-size {
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+.pdf-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-view-pdf {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-view-pdf:hover {
+    background-color: var(--secondary-blue);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .pdf-preview-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pdf-buttons {
+        justify-content: center;
+    }
 }
