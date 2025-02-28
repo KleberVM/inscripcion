@@ -9,8 +9,6 @@
 </head>
 <body>
     <div class="container">
-        
-
         <!-- Barra de Progreso -->
         <div class="progress-bar">
             <div class="progress" id="formProgress"></div>
@@ -41,6 +39,12 @@
             <div class="form-group">
                 <label for="documento">Documento de Identidad *</label>
                 <input type="text" id="documento" name="documento" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="colegio">Nombre del Colegio *</label>
+                <input type="text" id="colegio" name="colegio" required>
                 <span class="error-message"></span>
             </div>
 
@@ -98,8 +102,23 @@
             </div>
 
             <div class="form-group">
+                <label for="email_contacto">Correo Electrónico de Contacto *</label>
+                <input type="email" id="email_contacto" name="email_contacto" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
                 <label for="telefono">Teléfono *</label>
-                <input type="tel" id="telefono" name="telefono" required>
+                <div class="telefono-container">
+                    <input type="tel" id="telefono" name="telefono" required>
+                    <select id="tipo_telefono" name="tipo_telefono" required>
+                        <option value="">Seleccione el tipo</option>
+                        <option value="estudiante">Del Estudiante</option>
+                        <option value="tutor">Del Tutor</option>
+                        <option value="padre">Del Padre/Madre</option>
+                    </select>
+                </div>
+                <span class="error-message"></span>
             </div>
 
             <!-- Sección de Tutores -->
@@ -138,9 +157,32 @@
                         <label for="fisica"><i class="fas fa-atom"></i> Física</label>
                     </div>
                     <div class="area-checkbox">
+                        <input type="checkbox" id="quimica" name="areas" value="quimica">
+                        <label for="quimica"><i class="fas fa-flask"></i> Química</label>
+                    </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="biologia" name="areas" value="biologia">
+                        <label for="biologia"><i class="fas fa-dna"></i> Biología</label>
+                    </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="astronomia" name="areas" value="astronomia">
+                        <label for="astronomia"><i class="fas fa-star"></i> Astronomía y Astrofísica</label>
+                    </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="informatica" name="areas" value="informatica">
+                        <label for="informatica"><i class="fas fa-laptop-code"></i> Informática</label>
+                    </div>
+                    <div class="area-checkbox">
                         <input type="checkbox" id="robotica" name="areas" value="robotica">
                         <label for="robotica"><i class="fas fa-robot"></i> Robótica</label>
                     </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="ambiental" name="areas" value="ambiental">
+                        <label for="ambiental"><i class="fas fa-leaf"></i> Ciencias Ambientales</label>
+                    </div>
+                </div>
+                <div class="areas-error" style="display: none;">
+                    <p class="error-text"><i class="fas fa-exclamation-circle"></i> Solo puedes seleccionar hasta 2 áreas</p>
                 </div>
                 <span class="error-message"></span>
             </div>
@@ -158,6 +200,38 @@
             <!-- Updated Payment Section -->
             <h2 class="section-title"><i class="fas fa-money-bill"></i> Información de Pago</h2>
             <div class="payment-section">
+                <div class="payment-instructions">
+                    <h3><i class="fas fa-info-circle"></i> Instrucciones de Pago</h3>
+                    <p>Realiza el depósito en la siguiente cuenta:</p>
+                    <div class="account-info">
+                        <p><strong>Caja:</strong> Caja central de la UMSS</p>
+                        <p><strong>Cuenta:</strong> 1000-456789-123</p>
+                        <p><strong>Titular:</strong> Olimpiadas Oh! SanSi</p>
+                    </div>
+                    <div class="location-info">
+                        <h4><i class="fas fa-map-marker-alt"></i> Ubicación de Pago</h4>
+                        <p>Av. Oquendo y calle Jordán, Cochabamba, Bolivia</p>
+                        <div class="map-container">
+                            <iframe 
+                                src="https://www.google.com/maps?q=-17.393759, -66.146435&hl=es;z=18&output=embed" 
+                                width="100%" 
+                                height="300" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+
+                            
+
+                        </div>
+                        <div class="location-details">
+                            <p><i class="fas fa-clock"></i> <strong>Horario de atención:</strong> 8:30 - 15:00</p>
+                            <p><i class="fas fa-phone-alt"></i> <strong>Teléfono:</strong> 71492221</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="total-container">
                     <h3>Total a Pagar: <span id="totalPago">0.00 Bs.</span></h3>
                     <p class="payment-info">
@@ -200,22 +274,30 @@
                 <button type="button" id="resetForm" class="btn-secondary">
                     <i class="fas fa-undo"></i> Borrar Formulario
                 </button>
-                <button type="submit" class="btn-primary">
+                <button type="submit" class="btn-primary pulse">
                     <i class="fas fa-paper-plane"></i> Enviar Inscripción
                 </button>
             </div>
         </form>
 
-        <!-- Modal de Confirmación -->
-        <div id="confirmationModal" class="modal">
-            <div class="modal-content">
-                <i class="fas fa-check-circle success-icon"></i>
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content success-animation">
+                <div class="success-checkmark">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                        <div class="icon-circle"></div>
+                        <div class="icon-fix"></div>
+                    </div>
+                </div>
                 <h3>¡Inscripción Exitosa!</h3>
                 <p>Tu inscripción ha sido registrada correctamente.</p>
                 <p>Recibirás un correo de confirmación en breve.</p>
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
