@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción Olimpiadas Oh! SanSi</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        
+
+        <!-- Barra de Progreso -->
+        <div class="progress-bar">
+            <div class="progress" id="formProgress"></div>
+        </div>
+
+        <h1>Inscripción Olimpiadas Oh! SanSi</h1>
+        
+        <form id="registrationForm" enctype="multipart/form-data">
+            <!-- Datos del Estudiante -->
+            <h2 class="section-title"><i class="fas fa-user"></i> Datos del Estudiante</h2>
+            <div class="form-group">
+                <label for="nombre">Nombre(s) *</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="apellido">Primer Apellido *</label>
+                <input type="text" id="apellido" name="apellido" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_apellido">Segundo Apellido</label>
+                <input type="text" id="segundo_apellido" name="segundo_apellido">
+            </div>
+
+            <div class="form-group">
+                <label for="documento">Documento de Identidad *</label>
+                <input type="text" id="documento" name="documento" required>
+                <span class="error-message"></span>
+            </div>
+
+            <!-- Ubicación -->
+            <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> Ubicación</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="departamento">Departamento *</label>
+                    <select id="departamento" name="departamento" required>
+                        <option value="">Seleccione Departamento</option>
+                        <option value="LP">La Paz</option>
+                        <option value="CB">Cochabamba</option>
+                        <option value="SC">Santa Cruz</option>
+                        <option value="OR">Oruro</option>
+                        <option value="PT">Potosí</option>
+                        <option value="TJ">Tarija</option>
+                        <option value="CH">Chuquisaca</option>
+                        <option value="BE">Beni</option>
+                        <option value="PD">Pando</option>
+                    </select>
+                    <span class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="provincia">Provincia *</label>
+                    <select id="provincia" name="provincia" required>
+                        <option value="">Seleccione Provincia</option>
+                        <!-- Se poblará mediante JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="escolaridad">Nivel de Escolaridad *</label>
+                <select id="escolaridad" name="escolaridad" required>
+                    <option value="">Seleccione un nivel</option>
+                    <option value="3P">3° Primaria</option>
+                    <option value="4P">4° Primaria</option>
+                    <option value="5P">5° Primaria</option>
+                    <option value="6P">6° Primaria</option>
+                    <option value="1S">1° Secundaria</option>
+                    <option value="2S">2° Secundaria</option>
+                    <option value="3S">3° Secundaria</option>
+                    <option value="4S">4° Secundaria</option>
+                    <option value="5S">5° Secundaria</option>
+                    <option value="6S">6° Secundaria</option>
+                </select>
+            </div>
+
+            <!-- Datos de Contacto -->
+            <h2 class="section-title"><i class="fas fa-phone"></i> Datos de Contacto</h2>
+            <div class="form-group">
+                <label for="email_estudiante">Correo Electrónico del Estudiante</label>
+                <input type="email" id="email_estudiante" name="email_estudiante">
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono *</label>
+                <input type="tel" id="telefono" name="telefono" required>
+            </div>
+
+            <!-- Sección de Tutores -->
+            <h2 class="section-title"><i class="fas fa-users"></i> Datos del Tutor</h2>
+            <div id="tutores-container">
+                <div class="tutor-section">
+                    <div class="form-group">
+                        <label for="tutor_nombre_1">Nombre del Tutor *</label>
+                        <input type="text" id="tutor_nombre_1" name="tutor_nombre[]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tutor_email_1">Correo Electrónico del Tutor *</label>
+                        <input type="email" id="tutor_email_1" name="tutor_email[]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tutor_telefono_1">Teléfono del Tutor *</label>
+                        <input type="tel" id="tutor_telefono_1" name="tutor_telefono[]" required>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="agregar_tutor" class="btn-secondary">
+                <i class="fas fa-plus"></i> Agregar otro Tutor
+            </button>
+
+            <!-- Áreas de Competencia -->
+            <h2 class="section-title"><i class="fas fa-medal"></i> Áreas de Competencia</h2>
+            <div class="form-group">
+                <label>Áreas de Competencia * <span class="tooltip">(Máximo 2 áreas)</span></label>
+                <div class="areas-container">
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="matematicas" name="areas" value="matematicas">
+                        <label for="matematicas"><i class="fas fa-calculator"></i> Matemáticas</label>
+                    </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="fisica" name="areas" value="fisica">
+                        <label for="fisica"><i class="fas fa-atom"></i> Física</label>
+                    </div>
+                    <div class="area-checkbox">
+                        <input type="checkbox" id="robotica" name="areas" value="robotica">
+                        <label for="robotica"><i class="fas fa-robot"></i> Robótica</label>
+                    </div>
+                </div>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="form-group" id="roboticaCategoria" style="display: none;">
+                <label for="categoria">Categoría de Robótica *</label>
+                <select id="categoria" name="categoria">
+                    <option value="">Seleccione una categoría</option>
+                    <option value="seguidor">Seguidor de Línea</option>
+                    <option value="sumo">Sumo Robot</option>
+                    <option value="libre">Categoría Libre</option>
+                </select>
+            </div>
+
+            <!-- Updated Payment Section -->
+            <h2 class="section-title"><i class="fas fa-money-bill"></i> Información de Pago</h2>
+            <div class="payment-section">
+                <div class="total-container">
+                    <h3>Total a Pagar: <span id="totalPago">0.00 Bs.</span></h3>
+                    <p class="payment-info">
+                        <i class="fas fa-info-circle"></i>
+                        El monto se calcula según las áreas seleccionadas
+                    </p>
+                </div>
+
+                <div class="form-group file-upload-section">
+                    <label for="comprobante" class="upload-label">
+                        <i class="fas fa-receipt"></i>
+                        Comprobante de Pago *
+                    </label>
+                    <div class="file-upload-container">
+                        <div class="file-upload-box">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <input type="file" 
+                                   id="comprobante" 
+                                   name="comprobante" 
+                                   accept=".jpg,.jpeg,.png,.pdf" 
+                                   required>
+                            <p class="upload-text">Arrastra tu archivo aquí o haz clic para seleccionar</p>
+                            <p class="file-restrictions">
+                                <i class="fas fa-info-circle"></i>
+                                Formatos permitidos: JPG, PNG, PDF (máx. 2MB)
+                            </p>
+                        </div>
+                        <div id="file-preview" class="file-preview">
+                            <span class="selected-file-name"></span>
+                            <button type="button" class="remove-file" id="remove-file">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <span class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="button" id="resetForm" class="btn-secondary">
+                    <i class="fas fa-undo"></i> Borrar Formulario
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar Inscripción
+                </button>
+            </div>
+        </form>
+
+        <!-- Modal de Confirmación -->
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>¡Inscripción Exitosa!</h3>
+                <p>Tu inscripción ha sido registrada correctamente.</p>
+                <p>Recibirás un correo de confirmación en breve.</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
