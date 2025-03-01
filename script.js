@@ -12,6 +12,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalPago = document.getElementById('totalPago');
     const departamentoSelect = document.getElementById('departamento');
     const provinciaSelect = document.getElementById('provincia');
+    const colegioInput = document.getElementById('colegio');
+    const colegiosPermitidos = ['Adventista', '1ro de Mayo B', 'Ricardo Prudencio'];
+
+    // Agregar después de las referencias DOM existentes
+    const colegioSearchModal = document.getElementById('colegioSearchModal');
+    // const btnBuscarColegio = document.getElementById('btnBuscarColegio');
+    const closeSearchModal = document.getElementById('closeSearchModal');
+    const colegioSeleccionado = document.getElementById('colegioSeleccionado');
+    const colegioBuscador = document.getElementById('colegioBuscador');
+    const colegiosList = document.getElementById('colegiosList');
+
+    // Lista completa de colegios ordenada alfabéticamente
+    const colegios = [
+        { id: 'adventista', nombre: 'Adventista' },
+        { id: '1ro_mayo_b', nombre: '1ro de Mayo B' },
+        { id: 'ricardo_prudencio', nombre: 'Ricardo Prudencio' },
+        // Agregar más colegios aquí ordenados alfabéticamente
+    ].sort((a, b) => a.nombre.localeCompare(b.nombre));
 
     // Configuración
     const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -264,6 +282,105 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // Validar colegio
+    function validarColegio() {
+        if (!colegioInput.value) {
+            showError(colegioInput, 'Por favor seleccione un colegio de la lista');
+            return false;
+        }
+        clearError(colegioInput);
+        return true;
+    }
+
+    // Función para filtrar colegios
+    function filtrarColegios(busqueda) {
+        return colegios.filter(colegio => 
+            colegio.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        );
+    }
+
+    // Función para mostrar las opciones filtradas
+    function mostrarOpciones(opciones) {
+        colegioOptions.innerHTML = '';
+        opciones.forEach(colegio => {
+            const div = document.createElement('div');
+            div.className = 'select-option';
+            div.textContent = colegio.nombre;
+            div.addEventListener('click', () => {
+                colegioInput.value = colegio.id;
+                colegioBuscador.value = colegio.nombre;
+                colegioOptions.classList.remove('show');
+                clearError(colegioInput);
+                updateProgress();
+            });
+            colegioOptions.appendChild(div);
+        });
+        colegioOptions.classList.add('show');
+    }
+
+    // Función para mostrar el modal de búsqueda
+    function showColegioSearchModal() {
+        colegioSearchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        colegioBuscador.value = '';
+        mostrarColegios(colegios);
+        setTimeout(() => colegioBuscador.focus(), 300);
+    }
+
+    // Función para cerrar el modal
+    function closeColegioSearchModal() {
+        colegioSearchModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Función para mostrar colegios en la lista
+    function mostrarColegios(colegiosFiltrados) {
+        const noResults = document.querySelector('.no-results');
+        colegiosList.innerHTML = '';
+
+        if (colegiosFiltrados.length === 0) {
+            noResults.style.display = 'block';
+            return;
+        }
+
+        noResults.style.display = 'none';
+        colegiosFiltrados.forEach(colegio => {
+            const div = document.createElement('div');
+            div.className = 'colegio-item';
+            div.innerHTML = `<i class="fas fa-school"></i> ${colegio.nombre}`;
+            div.onclick = () => seleccionarColegio(colegio);
+            colegiosList.appendChild(div);
+        });
+    }
+
+    // Función para seleccionar un colegio
+    function seleccionarColegio(colegio) {
+        colegioSeleccionado.value = colegio.nombre;
+        document.getElementById('colegio').value = colegio.id;
+        closeColegioSearchModal();
+        clearError(colegioSeleccionado);
+        updateProgress();
+    }
+
+    // Event Listeners para el buscador
+    colegioBuscador.addEventListener('input', (e) => {
+        const busqueda = e.target.value;
+        const opciones = filtrarColegios(busqueda);
+        mostrarOpciones(opciones);
+    });
+
+    colegioBuscador.addEventListener('focus', () => {
+        const opciones = filtrarColegios(colegioBuscador.value);
+        mostrarOpciones(opciones);
+    });
+
+    // Cerrar opciones al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!colegioBuscador.contains(e.target) && !colegioOptions.contains(e.target)) {
+            colegioOptions.classList.remove('show');
+        }
+    });
+
     // Event Listeners
     form.addEventListener('input', updateProgress);
 
@@ -325,6 +442,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('agregar_tutor').addEventListener('click', agregarTutor);
 
+    colegioInput.addEventListener('change', validarColegio);
+    colegioInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^a-zA-Z0-9\s]/g, '');
+    });
+
     // Reset form
     resetFormBtn.addEventListener('click', () => {
         if (confirm('¿Estás seguro de que deseas borrar todo el formulario?')) {
@@ -341,6 +463,10 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        if (!validarColegio()) {
+            return;
+        }
+        
         // Aquí irían las validaciones finales y el envío al servidor
         
         // Simulación de envío exitoso
@@ -356,4 +482,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicialización
     updateProgress();
     updateTotal();
+
+    // Event Listeners
+    // btnBuscarColegio.addEventListener('click', showColegioSearchModal);
+    closeSearchModal.addEventListener('click', closeColegioSearchModal);
+
+    colegioBuscador.addEventListener('input', (e) => {
+        const colegiosFiltrados = filtrarColegios(e.target.value);
+        mostrarColegios(colegiosFiltrados);
+    });
+
+    colegioSearchModal.addEventListener('click', (e) => {
+        if (e.target === colegioSearchModal) {
+            closeColegioSearchModal();
+        }
+    });
+
+    // Evitar que se pueda escribir directamente en el input de colegio seleccionado
+    colegioSeleccionado.addEventListener('keydown', (e) => {
+        e.preventDefault();
+    });
+
+    // Agregar event listener para el input de colegio
+    colegioSeleccionado.addEventListener('click', showColegioSearchModal);
+    colegioSeleccionado.addEventListener('click', showColegioSearchModal);
 });

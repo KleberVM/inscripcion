@@ -43,8 +43,15 @@
             </div>
 
             <div class="form-group">
-                <label for="colegio">Nombre del Colegio *</label>
-                <input type="text" id="colegio" name="colegio" required>
+                <label for="colegio">Colegio *</label>
+                <div class="select-search-container">
+                    <input type="text" 
+                           id="colegioSeleccionado" 
+                           placeholder="Haga clic para buscar colegio"
+                           readonly
+                           required>
+                    <input type="hidden" id="colegio" name="colegio">
+                </div>
                 <span class="error-message"></span>
             </div>
 
@@ -294,6 +301,31 @@
                 <h3>¡Inscripción Exitosa!</h3>
                 <p>Tu inscripción ha sido registrada correctamente.</p>
                 <p>Recibirás un correo de confirmación en breve.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="colegioSearchModal" class="search-modal">
+        <div class="search-modal-content">
+            <div class="search-header">
+                <h3><i class="fas fa-school"></i> Seleccionar Colegio</h3>
+                <button type="button" class="btn-close" id="closeSearchModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       id="colegioBuscador" 
+                       placeholder="Escriba el nombre del colegio..."
+                       autocomplete="off">
+            </div>
+            <div class="colegios-list-container">
+                <div class="colegios-list" id="colegiosList"></div>
+                <div class="no-results" style="display: none;">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No se encontraron colegios</p>
+                </div>
             </div>
         </div>
     </div>
